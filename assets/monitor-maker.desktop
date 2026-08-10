@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Portal 2 Monitor Maker
+Comment=A small tool for creating custom monitor props for Portal 2
 Exec=monitor-maker
 Categories=Utility
 Icon=MonMakeLogo_512
