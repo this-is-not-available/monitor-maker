@@ -1,0 +1,163 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0405
+header_name {.h}
+code_name {.cpp}
+decl {\#include <FL/Fl_PNG_Image.H>} {private global
+}
+
+decl {\#include "resizable_image.h"} {public global
+}
+
+decl {\#include "gui_callback.h"} {public global
+}
+
+data appIcon {selected private global filename {../../assets/MonMakeLogo_32.png}
+}
+
+Function {init()} {open C
+} {
+  Fl_Window {} {
+    label {Portal 2 Monitor Maker} open
+    xywh {2065 737 1270 910} type Double color 55 align 80 resizable
+    code0 {o->icon(new Fl_PNG_Image("MonMakeIcon.png", appIcon, 109342));} visible
+  } {
+    Fl_Group Sidebar {open
+      xywh {0 0 399 910} align 5
+    } {
+      Fl_Check_Button MonitorCutoffCheckbox {
+        label {Preview monitor cutoff}
+        callback {PreviewImage->TogglePreviewFromCheckbox(o)}
+        xywh {15 22 20 25} down_box DOWN_BOX align 8
+      }
+      Fl_Box {} {
+        label {Selected skin}
+        xywh {15 272 140 25} labelfont 1 align 20
+      }
+      Fl_Box ResolutionDisplay {
+        label {Resolution: 512x512}
+        xywh {15 302 205 25} align 20
+      }
+      Fl_Box SkinFrameCountDisplay {
+        label {Frames in selected skin: 1}
+        xywh {15 332 205 25} align 20
+      }
+      Fl_Check_Button ScanlineCheckbox {
+        label {Add scanline effect? }
+        callback {ScanlineCheckboxCallback(o);}
+        xywh {15 362 20 25} down_box DOWN_BOX align 8
+      }
+      Fl_Check_Button ScrollingCheckbox {
+        label {Make image scroll?}
+        callback {ScrollingCheckboxCallback(o);}
+        xywh {15 387 20 25} down_box DOWN_BOX align 8
+      }
+      Fl_Check_Button HorizontalScrollingCheckbox {
+        label {Horizontal?}
+        callback {HorizontalScrollingCheckboxCallback(o);}
+        xywh {180 387 20 25} down_box DOWN_BOX align 8
+      }
+      Fl_Check_Button AnimatedCheckbox {
+        label {Make animated? }
+        callback {AnimatedCheckboxCallback(o);}
+        xywh {15 412 20 25} down_box DOWN_BOX align 8
+      }
+      Fl_Spinner FPSInput {
+        label { FPS}
+        callback {FPSInputCallback(o);}
+        xywh {15 442 40 25} align 8 maximum 60 value 24
+      }
+      Fl_Spinner ScrollRateInput {
+        label { Scroll Speed}
+        callback {ScrollRateInputCallback(o);}
+        xywh {15 472 55 25} type Float align 8 minimum 0.05 maximum 1 step 0.05 value 0.2
+      }
+      Fl_Box SkinCountDisplay {
+        label {Skins: 1}
+        xywh {15 697 205 25} align 20
+      }
+      Fl_Box TotalFrameCountDisplay {
+        label {Total frames: 1}
+        xywh {15 722 205 25} align 20
+      }
+      Fl_Box {} {
+        label {Model name:}
+        xywh {15 747 205 25} align 20
+      }
+      Fl_Input ModelNameTextInput {
+        callback {ModelNameTextInputCallback(o);}
+        xywh {15 772 380 25} align 8
+      }
+      Fl_Box {} {
+        label {Monitor Shape:}
+        xywh {15 801 205 25} align 20
+      }
+      Fl_Choice PoseSelector {
+        callback {PoseSelectorCallback(o);}
+        xywh {15 827 92 22} down_box BORDER_BOX align 8
+      } {
+        MenuItem {} {
+          label Angled
+          xywh {0 0 100 20}
+        }
+        MenuItem {} {
+          label Straight
+          xywh {10 10 100 20}
+        }
+      }
+      Fl_Button ExportButton {
+        label Export
+        callback {ExportCallback(o);}
+        xywh {15 870 85 25} box GLEAM_THIN_UP_BOX color 55 selection_color 8
+      }
+    }
+    Fl_Group {} {open
+      xywh {399 5 866 900} align 9
+    } {
+      Fl_Box PreviewImage {
+        label {No Image Loaded}
+        xywh {405 45 850 850} box FLAT_BOX color 54 align 512
+        class MonitorAspectOutlineImage
+      }
+      Fl_Button LoadImageButton {
+        label {Load image for frame}
+        callback {LoadImageCallback(o);}
+        xywh {730 15 200 25} color 55
+      }
+      Fl_Button PlayAnimation {
+        label {►}
+        callback {PlayAnimationCallback(o);}
+        xywh {1065 15 25 25}
+      }
+      Fl_Spinner PreviewSkinSelector {
+        label {Skin:}
+        callback {SkinSelectorCallback(o);}
+        xywh {445 15 40 25} minimum 0 maximum 30 value 0
+      }
+      Fl_Button AddSkinButton {
+        label {+}
+        callback {AddSkinCallback(o);}
+        xywh {490 15 25 25}
+      }
+      Fl_Button RemoveSkinButton {
+        label {-}
+        callback {RemoveCurrentSkinCallback(o);}
+        xywh {520 15 25 25}
+      }
+      Fl_Spinner PreviewFrameSelector {
+        label {Frame:}
+        callback {FrameSelectorCallback(o);}
+        xywh {1150 15 40 25}
+      }
+      Fl_Button AddFrameButton {
+        label {+}
+        callback {AddFrameCallback(o);}
+        xywh {1195 15 25 25}
+      }
+      Fl_Button RemoveFrameButton {
+        label {-}
+        callback {RemoveCurrentFrameCallback(o);}
+        xywh {1225 15 25 25}
+      }
+    }
+  }
+}

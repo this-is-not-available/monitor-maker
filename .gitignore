@@ -1,0 +1,7 @@
+.vscode/
+.vs/
+AppDir/
+build/
+dist/
+test/
+*.AppImage
