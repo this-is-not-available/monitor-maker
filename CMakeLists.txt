@@ -34,7 +34,6 @@ FetchContent_Declare(
     GIT_SHALLOW    TRUE
 )
 
-# Prefer a static FLTK build and force FLTK to use its bundled image libraries
 set(FLTK_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(FLTK_USE_SYSTEM_LIBJPEG OFF CACHE BOOL "" FORCE)
 set(FLTK_USE_SYSTEM_LIBPNG  OFF CACHE BOOL "" FORCE)
