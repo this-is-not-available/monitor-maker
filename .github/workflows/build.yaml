@@ -44,6 +44,10 @@ jobs:
           DEPLOY_APPIMAGE_FILENAME=monitor-maker.AppImage ./scripts/deploy_appimage.sh
           mkdir dist
           mv monitor-maker.AppImage dist/
+
+    - name: Set up Windows Build Environment
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
     
     - name: Build app
       if: runner.os == 'Windows'
