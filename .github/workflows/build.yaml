@@ -68,14 +68,14 @@ jobs:
           mkdir dist/
           cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF -DCRYPTOPP_USE_MASTER_BRANCH=ON -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="dist/"
           cmake --build build/windows-release --config Release
-          ls
+          ls -R dist
 
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: dist-${{ matrix.runtime }}
-        path: dist
+        path: dist/**
 
   release:
     needs: build
