@@ -48,6 +48,12 @@ jobs:
     - name: Setup MSBuild
       if: runner.os == 'Windows'
       uses: microsoft/setup-msbuild@v2
+
+    - name: Setup VS shell
+      if: runner.os == 'Windows'
+      uses: egor-tensin/vs-shell@v2
+      with:
+        arch: x64
     
     - name: Build app
       if: runner.os == 'Windows'
