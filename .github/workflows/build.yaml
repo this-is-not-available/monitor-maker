@@ -65,7 +65,7 @@ jobs:
         FETCHCONTENT_BASE_DIR: ${{ github.workspace }}/cmake_deps_cache
       run: |
           sleep 5
-          cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF
+          cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF -DCRYPTOPP_USE_MASTER_BRANCH=ON
           cmake --build build/windows-release --config Release
           mkdir dist/
           mv build/windows-release/Release/monitor-maker.exe dist/
