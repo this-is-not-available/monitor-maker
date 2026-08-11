@@ -50,7 +50,8 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: x64
-        vsversion: 17.0
+        toolset: "17.0"
+        vsversion: "17.0"
     
     - name: Build app
       if: runner.os == 'Windows'
