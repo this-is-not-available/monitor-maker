@@ -10,7 +10,7 @@ BUILD_DIR="build/linux-release"
 rm -rf "$APPDIR"
 mkdir -p "$APPDIR"
 
-cmake --preset linux-release
+cmake --preset linux-release -DCMAKE_INSTALL_PREFIX=/usr/local -DMZ_BZIP2=OFF
 cmake --build "$BUILD_DIR" --parallel $(nproc)
 strip "$BUILD_DIR/monitor-maker"
 
@@ -24,9 +24,12 @@ if [ ! -f linuxdeploy.AppImage ]; then
     chmod +x linuxdeploy.AppImage
 fi
 
-#export OUTPUT="MyApp-x86_64.AppImage"
-./linuxdeploy.AppImage --appdir "$APPDIR" \
+if [ -n "${DEPLOY_APPIMAGE_FILENAME:-}" ]; then
+    export LDAI_OUTPUT="$DEPLOY_APPIMAGE_FILENAME"
+fi
+./linuxdeploy.AppImage --appimage-extract
+./squashfs-root/AppRun --appdir "$APPDIR" \
   --desktop-file="$APPDIR/monitor-maker.desktop" \
   --icon-file="$APPDIR/MonMakeLogo_512.png" \
-  --executable "$APPDIR/usr/bin/monitor-maker" \
+  --executable "$APPDIR/usr/local/bin/monitor-maker" \
   --output appimage

@@ -1,0 +1,85 @@
+name: Build Application
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            runtime: win-x64
+            build-dir: windows-release
+          - os: ubuntu-latest
+            runtime: linux-x64
+            build-dir: linux-release
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Cache CMake Dependencies
+      id: cache-cmake-deps
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/build/${{ matrix.build-dir }}/_deps
+        key: ${{ runner.os }}-cmake-deps-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-cmake-deps-
+
+    - name: Build app
+      if: runner.os == 'Linux'
+      env:
+        FETCHCONTENT_BASE_DIR: ${{ github.workspace }}/cmake_deps_cache
+      run: |
+          sudo apt update && sudo apt install bash ninja-build cmake git build-essential libfltk1.3-dev libgl1-mesa-dev libglx-dev libglu1-mesa-dev -y
+
+          chmod +x ./scripts/deploy_appimage.sh
+          DEPLOY_APPIMAGE_FILENAME=monitor-maker.AppImage ./scripts/deploy_appimage.sh
+          mkdir dist
+          mv monitor-maker.AppImage dist/
+
+    - name: Set up Windows Build Environment
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+        vsversion: 17.0
+    
+    - name: Build app
+      if: runner.os == 'Windows'
+      env:
+        FETCHCONTENT_BASE_DIR: ${{ github.workspace }}/cmake_deps_cache
+      run: |
+          cmake --preset windows-release -DMZ_BZIP2=OFF
+          cmake --build build/windows-release --config Release
+          mkdir dist/
+          mv build/windows-release/Release/monitor-maker.exe dist/
+
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-${{ matrix.runtime }}
+        path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-dist
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-dist/**

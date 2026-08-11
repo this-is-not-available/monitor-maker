@@ -23,7 +23,7 @@ You can import your images, select relevant options and export without the hassl
 
 Linux (Ubuntu):
 ```
-sudo apt update && sudo apt install cmake build-essential git -y
+sudo apt update && sudo apt install cmake ninja-build build-essential git libfltk1.3-dev libgl1-mesa-dev libglx-dev libglu1-mesa-dev -y
 
 cmake --preset linux-release
 cmake --build build/linux-release

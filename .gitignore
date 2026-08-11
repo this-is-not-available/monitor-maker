@@ -1,5 +1,9 @@
+# IDEs and editors
 .vscode/
 .vs/
+
+# development directories and files
+Artifacts/
 AppDir/
 build/
 dist/
