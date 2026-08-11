@@ -45,9 +45,9 @@ jobs:
           mkdir dist
           mv monitor-maker.AppImage dist/
 
-    - name: Set up Windows Build Environment
+    - name: Setup MSBuild
       if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: microsoft/setup-msbuild@v2
     
     - name: Build app
       if: runner.os == 'Windows'
