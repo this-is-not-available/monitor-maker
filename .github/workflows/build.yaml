@@ -55,12 +55,17 @@ jobs:
       with:
         arch: x64
     
+    - name: Setup CMake and Ninja
+      if: runner.os == 'Windows'
+      uses: lukka/get-cmake@latest
+    
     - name: Build app
       if: runner.os == 'Windows'
       env:
         FETCHCONTENT_BASE_DIR: ${{ github.workspace }}/cmake_deps_cache
       run: |
-          cmake --preset windows-release -DMZ_BZIP2=OFF
+          sleep 5
+          cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF
           cmake --build build/windows-release --config Release
           mkdir dist/
           mv build/windows-release/Release/monitor-maker.exe dist/
