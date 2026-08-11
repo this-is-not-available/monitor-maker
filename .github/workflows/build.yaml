@@ -66,7 +66,7 @@ jobs:
       run: |
           sleep 5
           mkdir dist/
-          cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF -DCRYPTOPP_USE_MASTER_BRANCH=ON -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "dist/"
+          cmake -S . -B build/windows-release -G "Ninja" -DMZ_BZIP2=OFF -DCRYPTOPP_USE_MASTER_BRANCH=ON -CMAKE_RUNTIME_OUTPUT_DIRECTORY "dist/"
           cmake --build build/windows-release --config Release
 
 
