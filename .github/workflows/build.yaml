@@ -76,6 +76,7 @@ jobs:
       with:
         name: dist-${{ matrix.runtime }}
         path: dist/**
+        if-no-files-found: error
 
   release:
     needs: build
