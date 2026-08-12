@@ -1,7 +1,7 @@
 # zstd/zlib
 cmake_minimum_required(VERSION 3.29.3)
 set(CMAKE_INSTALL_PREFIX "/usr")
-project(monitor-maker VERSION 0.1.0 LANGUAGES C CXX)
+project(monitor-maker VERSION 0.1.1 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
