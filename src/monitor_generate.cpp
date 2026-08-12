@@ -9,8 +9,7 @@
 
 #include <vector>
 
-// Please forgive me for my sins writing this code,
-// this was the simplest way to implement it without hardcoding every permutation
+// This was the simplest way to implement it without hardcoding every permutation
 // also these path operations are super sketchy and prone to errors
 // ..atleast I refactored the major sections into their own functions
 
@@ -120,8 +119,7 @@ void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory
     fs::path modelFilename = ((fs::path)modelPath).filename();
     std::string modelName = ((fs::path)modelPath).filename().string();
 
-    // /mnt/g/SteamLibrary/steamapps/common/Portal 2/portal2_dlc3/models/props/lab_monitor_test/lab_monitor_test_pose03.mdl
-    fs::path modelDir = outputDirectory / ((fs::path)modelPath).parent_path(); //"models/props" / "monitor_test_change_me";
+    fs::path modelDir = outputDirectory / ((fs::path)modelPath).parent_path();
     fs::path textureDir = outputDirectory / "materials/models/props" / modelFilename.replace_extension("");
 
     bool worked = fs::create_directories(modelDir);
@@ -143,7 +141,7 @@ void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory
     std::vector<std::byte> mdl = ReadMonitorFile(DEFAULT_MDL_PATH, angled);
     MDL model = ParseMDL(mdl);
 
-    model.model_name = modelPath.replace(0, std::string_view("models/").length(), "");//(fs::path)"props" / "monitor_test_change_me" / modelName;
+    model.model_name = modelPath.replace(0, std::string_view("models/").length(), "");
     model.skin_table = {};
     model.material_names.resize(skins.size() + 1);
     model.cdmaterials.push_back(("models/props" / modelFilename.replace_extension("") / "").string());

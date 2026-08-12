@@ -13,10 +13,19 @@
 // RGBA 32bpp format
 #define RGBATexture std::vector<std::byte>
 
+// according to VDC page on skins, StudioMDL can only compile models with 31 skins, even though it claims it can do 32
+// we aren't really constrained by the limitations of StudioMDL, but 31 seems like a sane maximum for now
 #define MAX_SKINS 31
 #define MAX_FRAMES 99 // just so the spinner text doesn't overflow the frame
 
 #define PORTAL2_STEAM_APPID 620
+
+#ifdef _WIN32
+    #define DEFAULT_PORTAL2_DIRECTORY_EXAMPLE "C:/Program Files (x86)/Steam/steamapps/common/Portal 2"
+#else
+    // TODO: Use WSL mount as example?
+    #define DEFAULT_PORTAL2_DIRECTORY_EXAMPLE "/mnt/c/Program Files (x86)/Steam/steamapps/common/Portal 2"
+#endif
 
 class Skin {
 public:

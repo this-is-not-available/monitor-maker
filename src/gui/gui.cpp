@@ -22,12 +22,6 @@ void SetVisible(Fl_Widget* w, bool visible) {
 void UpdatePreviewImage() {
     Skin currentSkin = skins[selectedSkin];
 
-    // Annoying to have to do this here too
-    // since it's already used in UpdateInterface() which also calls this function
-    // but it otherwise wouldn't update if we are animating
-    PreviewFrameSelector->value(selectedFrame);
-
-
     if (currentSkin.imageLoaded[selectedFrame - 1]) {
         Fl_Image * preview = currentSkin.previewImages[selectedFrame - 1];
         PreviewImage->image(preview);
@@ -99,6 +93,7 @@ void AnimationCallback(void* data) {
     if (isAnimating) {
         selectedFrame %= skins[selectedSkin].frames.size();
         selectedFrame += 1;
+        PreviewFrameSelector->value(selectedFrame);
         UpdatePreviewImage();
         Fl::repeat_timeout(1.0 / skins[selectedSkin].fps, AnimationCallback, data);
     }

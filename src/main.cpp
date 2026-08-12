@@ -6,7 +6,6 @@
 #include <fspp/fspp.h>
 #include <vtfpp/vtfpp.h>
 #include <steampp/steampp.h>
-#include <vpkpp/vpkpp.h>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Preferences.H>
 
@@ -23,13 +22,14 @@ std::string modelName = "models/props/lab_monitor/model_name.mdl";
 std::vector<Skin> skins;
 unsigned char selectedSkin = 0;
 unsigned int selectedFrame = 1;
-// first option in the ui
+// by default, the UI has selected the angled option from the dropdown
 bool angled = true;
 
 bool p2Found = true;
 fs::path p2Path;
 
 std::optional<fspp::FileSystem> gamefs = std::nullopt;
+fspp::FileSystemOptions options;
 Fl_Preferences prefs(Fl_Preferences::USER_L, "this_is_not_available", "monitor_maker");
 
 int materialName = 0;
@@ -121,57 +121,71 @@ bool LoadPortal2FromPath(fs::path path, fspp::FileSystemOptions options) {
     return true;
 }
 
+bool LoadPortal2FromPrefs() {
+    char *savedDir = nullptr;
+    prefs.get("P2Dir", savedDir, "");
+
+    fs::path savedPath = savedDir;
+    free(savedDir);
+    if (LoadPortal2FromPath(savedPath, options)) {
+        return true;
+    }
+    return false;
+}
+
+bool LoadPortal2FromUserInput() {
+    const char *input = fl_input("Your installation of Portal 2 was not automatically found. Some features will not work unless you enter the path to your Portal 2 installation", DEFAULT_PORTAL2_DIRECTORY_EXAMPLE);
+
+    if (input == NULL) {
+       return false;
+    }
+
+    fs::path inputPath = input;
+    if (LoadPortal2FromPath(inputPath, options)) {
+        return true;
+    }
+    return false;
+}
+
 // Tries to find Portal 2, asking user to input path to it if not automatically found
 // Loads p2Path, p2Found and gamefs with initialized values if successful
 void LoadPortal2() {
     steampp::Steam *steam = new steampp::Steam();
-    fspp::FileSystemOptions options;
 
+    p2Found = true;
     if (!steam->isAppInstalled(PORTAL2_STEAM_APPID)) {
         p2Found = false;
     }
 
-    if (p2Found && steam->getAppInstallDir(PORTAL2_STEAM_APPID).empty())
-        p2Found = false;
+    fs::path steamP2InstallPath;
+    if (p2Found) {
+        steamP2InstallPath = steam->getAppInstallDir(PORTAL2_STEAM_APPID);
+        if (steamP2InstallPath.empty())
+            p2Found = false;
+    }
+    
+    delete steam;
 
-    if (!p2Found) {
-
-        char *savedDir = nullptr;
-        prefs.get("P2Dir", savedDir, "");
-
-        fs::path savedPath = savedDir;
-        free(savedDir);
-        if (LoadPortal2FromPath(savedPath, options)) {
-            return;
-        }
-
-        const char *input = fl_input("Your installation of Portal 2 was not automatically found. Exporting will not work unless you enter the path to your Portal 2 installation", "/mnt/g/SteamLibrary/steamapps/common/Portal 2");
-
-        if (input == NULL) {
-            goto p2NotFound;
-        }
-
-        fs::path inputPath = input;
-
-        if (LoadPortal2FromPath(inputPath, options)) {
-            prefs.set("P2Dir", inputPath.string().c_str());
-            return;
-        }
-    } else {
+    if (p2Found) {
         gamefs = fspp::FileSystem::load(PORTAL2_STEAM_APPID, "portal2", options);
 
-        if (!gamefs.has_value()) {
-            goto p2NotFound;
+        if (gamefs.has_value()) {
+            p2Path = steamP2InstallPath;
+        } else {
+            p2Found = false;
         }
-        
-        p2Path = steam->getAppInstallDir(PORTAL2_STEAM_APPID);
-        p2Found = true;
+    } else {
+        // loads variables internally
+        if (LoadPortal2FromPrefs()) {
+            return;
+        }
+
+        // loads variables internally
+        if (LoadPortal2FromUserInput()) {
+            prefs.set("P2Dir", p2Path.string().c_str());
+            return;
+        }
     }
-
-p2NotFound:
-
-    delete steam;
-    return;
 }
 
 void ExportModel(fs::path outputPath) {
@@ -188,9 +202,12 @@ int main(int argc, char** argv) {
     UpdateInterface();
 
     window->show();
+
 #ifdef _WIN32
+    // Windows on 150% scale looks huge by default
     float current_scale = Fl::screen_scale(window->screen_num());
-    Fl::screen_scale(window->screen_num(), current_scale / 1.2f);
+    Fl::screen_scale(window->screen_num(), current_scale / 1.333f);
 #endif
+
     return Fl::run();;
 }
