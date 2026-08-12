@@ -98,22 +98,30 @@ std::string GenerateVMT(Skin skin, fs::path modelFilename) {
     return vmt_content;
 }
 
-void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory, std::string modelPath, bool angled, OutputFormat outputFormat) {
+bool WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory, std::string modelPath, bool angled, OutputFormat outputFormat) {
     if (!(skins.size() > 0)) {
         std::cout << "No skins provided" << std::endl;
-        return;
+        return false;
+    }
+    if (skins.size() > 31) {
+        std::cout << "Too many skins" << std::endl;
+        return false;
+    }
+    if (((skins.size() == 1) && ((skins[0].width * skins[0].height) == 0))) {
+        std::cout << "Select a texture first" << std::endl;
+        return false;
     }
     if (outputFormat == OutputFormat::FolderOutput && !modelPath.ends_with(".mdl")) {
         std::cout << "Invalid model path: no .mdl" << std::endl;
-        return;
+        return false;
     }
     if (outputFormat == OutputFormat::FolderOutput && !modelPath.starts_with("models/")) {
         std::cout << "Invalid model path: no models/" << std::endl;
-        return;
+        return false;
     }
     if (!std::filesystem::exists(outputDirectory)) {
         std::cout << "Output directory doesn't exist" << std::endl;
-        return;
+        return false;
     }
 
     fs::path modelFilename = ((fs::path)modelPath).filename();
@@ -132,7 +140,7 @@ void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory
             std::cout << "Directories already exists.\n";
         } else {
             std::cout << "Directories could not be created.\n";
-            return;
+            return false;
         }
     }
 
@@ -198,7 +206,7 @@ void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory
 
         if (!outputVMTFile.is_open()) {
             std::cerr << "Error opening the VMT file!" << std::endl;
-            return;
+            return false;
         }
 
         std::string vmt_content = GenerateVMT(skin, modelFilename);
@@ -209,4 +217,5 @@ void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory
     }
     
     std::cout << "Finished" << std::endl;
+    return true;
 }

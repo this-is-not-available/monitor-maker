@@ -189,8 +189,33 @@ void LoadPortal2() {
 }
 
 void ExportModel(fs::path outputPath) {
-    // "lab_monitor_test.mdl"
-    WriteMonitor(skins, outputPath, modelName, angled, OutputFormat::FolderOutput);
+    // Redirect stdout
+    std::streambuf* stdout_buf = std::cout.rdbuf();
+    std::stringstream stream;
+    std::cout.rdbuf(stream.rdbuf());
+
+    bool success = false;
+    try
+    {
+        success = WriteMonitor(skins, outputPath, modelName, angled, OutputFormat::FolderOutput);
+    }
+    catch(const std::exception& e)
+    {
+        // !! will not catch synchronous exceptions !!
+        success = false;
+        std::cout << "***Crash***\nwhat(): " << e.what() << '\n';
+    }
+
+    // Restore stdout
+    std::cout.rdbuf(stdout_buf);
+    
+
+    if (success) {
+        fl_message("Success!");
+    } else {
+        fl_alert(("An issue occurred while exporting!\nLog:\n" + stream.str()).c_str());
+        std::cout << stream.str() << std::endl;
+    }
 }
 
 // Entry point

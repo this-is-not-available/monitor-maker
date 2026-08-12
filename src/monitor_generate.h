@@ -23,6 +23,6 @@ enum OutputFormat {
     // OutputZip
 };
 
-void WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory, std::string modelPath, bool angled, OutputFormat outputFormat);
+bool WriteMonitor(std::vector<Skin> skins, std::filesystem::path outputDirectory, std::string modelPath, bool angled, OutputFormat outputFormat);
 
 #endif
