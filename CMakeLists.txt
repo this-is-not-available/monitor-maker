@@ -5,7 +5,7 @@ if(LINUX)
   set(CMAKE_INSTALL_PREFIX "/usr")
 endif()
 
-project(monitor-maker VERSION 0.1.1 LANGUAGES C CXX)
+project(monitor-maker VERSION 0.1.2 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,7 +44,6 @@ set(FLTK_USE_SYSTEM_LIBJPEG OFF CACHE BOOL "" FORCE)
 set(FLTK_USE_SYSTEM_LIBPNG  OFF CACHE BOOL "" FORCE)
 set(FLTK_USE_SYSTEM_ZLIB    OFF CACHE BOOL "" FORCE)
 
-#FetchContent_MakeAvailable(fltk)
 FetchContent_GetProperties(fltk)
 if(NOT fltk_POPULATED)
     FetchContent_Populate(fltk)
