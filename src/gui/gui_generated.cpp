@@ -332,7 +332,7 @@ Fl_Double_Window* init() {
       o->end();
     } // Fl_Group* o
     o->resizable(o);
-    o->icon(new Fl_PNG_Image("MonMakeIcon.png", appIcon, 109342));
+    o->icon(new Fl_PNG_Image("MonMakeIcon.png", appIcon, sizeof(appIcon)));
     o->end();
   } // Fl_Double_Window* o
   return w;

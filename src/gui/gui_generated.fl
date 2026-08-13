@@ -19,7 +19,7 @@ Function {init()} {open C
   Fl_Window {} {
     label {Portal 2 Monitor Maker} open
     xywh {2065 737 1270 910} type Double color 55 align 80 resizable
-    code0 {o->icon(new Fl_PNG_Image("MonMakeIcon.png", appIcon, 109342));} visible
+    code0 {o->icon(new Fl_PNG_Image("MonMakeIcon.png", appIcon, sizeof(appIcon)));} visible
   } {
     Fl_Group Sidebar {open
       xywh {0 0 399 910} align 5
