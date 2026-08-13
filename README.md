@@ -44,7 +44,6 @@ cmake --build build/windows-release --config Release
 All help is very much appreciated. Whether it be just using the application, testing it on various setups, submitting issues/feature requests or opening pull requests, everyone is welcome to participate.
 
 While there may not be many features that could be added, there still are some that might be nice to have at some point:
-- Executable icon (Windows)
 - Better coding standards
 - Vactube scanner TV model support
 - Various exporting options (VPK?)

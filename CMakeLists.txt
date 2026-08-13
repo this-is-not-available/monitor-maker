@@ -11,9 +11,13 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "" FORCE)
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
+if(WIN32)
+    set(WIN_RESOURCE_FILES assets/resources.rc)
+endif()
+
 add_executable(monitor-maker src/main.cpp src/monitor_generate.cpp src/vpk_read.cpp
   src/gui/gui.cpp src/gui/gui_callback.cpp src/gui/gui_generated.cpp src/gui/resizable_image.h
-  src/models/mdl.cpp src/models/vtx.cpp src/models/vvd.cpp src/models/phy.cpp)
+  src/models/mdl.cpp src/models/vtx.cpp src/models/vvd.cpp src/models/phy.cpp ${WIN_RESOURCE_FILES})
 
 target_include_directories(monitor-maker PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
