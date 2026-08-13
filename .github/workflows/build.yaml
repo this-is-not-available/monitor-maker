@@ -57,7 +57,7 @@ jobs:
     
     - name: Setup CMake and Ninja
       if: runner.os == 'Windows'
-      uses: lukka/get-cmake@latest
+      uses: lukka/get-cmake@v4.4.2
     
     - name: Build app
       if: runner.os == 'Windows'
