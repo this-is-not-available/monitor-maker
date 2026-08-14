@@ -118,7 +118,7 @@ install(TARGETS monitor-maker RUNTIME DESTINATION bin)
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME "Portal 2 Monitor Maker")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A small tool for creating custom monitor props from user-provided images for Portal 2.")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A small tool for creating custom monitor props from user-provided images for Portal 2 modding.")
 set(CPACK_PACKAGE_CONTACT "121245258+this-is-not-available@users.noreply.github.com")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_STRIP_FILES TRUE)
