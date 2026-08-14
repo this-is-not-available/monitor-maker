@@ -45,7 +45,7 @@ All help is very much appreciated. Whether it be just using the application, tes
 
 While there may not be many features that could be added, there still are some that might be nice to have at some point:
 - Better coding standards
-- Vactube scanner TV model support
+- Vactube scanner TV model and 1980s computer model support
 - Various exporting options (VPK?)
 - Improved preview showing the scanline and scrolling
 - Basic texture creation for text on a background
