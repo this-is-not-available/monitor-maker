@@ -76,7 +76,14 @@ void RemoveFrameFromSkin(Skin* skin, unsigned int frame) {
 void LoadImageForCurrentFrame(const char* filename) {
     vtfpp::VTF::CreationOptions options;
     options.outputFormat = vtfpp::ImageFormat::RGBA8888;
-    vtfpp::VTF vtf = vtfpp::VTF::create (filename, options);
+    vtfpp::VTF vtf;
+
+    // TODO: do not trust file extension
+    if (((std::string)filename).ends_with(".vtf")) {
+        vtf = vtfpp::VTF(filename);
+    } else {
+        vtf = vtfpp::VTF::create (filename, options);
+    }
 
     Skin *currentSkin = &skins[selectedSkin];
 
@@ -213,7 +220,8 @@ void ExportModel(fs::path outputPath) {
     if (success) {
         fl_message("Success!");
     } else {
-        fl_alert(("An issue occurred while exporting!\nLog:\n" + stream.str()).c_str());
+        std::string log_str = stream.str();
+        fl_alert("An issue occurred while exporting!\nLog:\n%s", log_str.c_str());
         std::cout << stream.str() << std::endl;
     }
 }
