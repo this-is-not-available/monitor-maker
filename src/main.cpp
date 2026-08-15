@@ -81,11 +81,19 @@ void LoadImageForCurrentFrame(const char* filename) {
     // TODO: do not trust file extension
     if (((std::string)filename).ends_with(".vtf")) {
         vtf = vtfpp::VTF(filename);
+        // Fix some vtfs not being powers of 2
+        vtf.setSize(std::bit_ceil(vtf.getWidth()), std::bit_ceil(vtf.getHeight()), vtfpp::ImageConversion::ResizeFilter::DEFAULT);
     } else {
         vtf = vtfpp::VTF::create (filename, options);
     }
 
     Skin *currentSkin = &skins[selectedSkin];
+
+    // If replacing the only frame in a skin, always use the maximum resolution
+    if (currentSkin->frames.size() == 1) {
+        currentSkin->width = 0;
+        currentSkin->height = 0;
+    }
 
     uint16_t width = vtf.getWidth();
     uint16_t height = vtf.getHeight();
