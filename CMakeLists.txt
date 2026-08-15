@@ -1,7 +1,7 @@
 # zstd/zlib
 cmake_minimum_required(VERSION 3.29.3)
 
-project(monitor-maker VERSION 0.1.2 LANGUAGES C CXX)
+project(monitor-maker VERSION 0.1.3 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
