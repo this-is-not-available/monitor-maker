@@ -5,6 +5,7 @@
 # development directories and files
 Artifacts/
 AppDir/
+squashfs-root/
 build/
 dist/
 test/
