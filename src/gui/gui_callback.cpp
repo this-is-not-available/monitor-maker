@@ -147,7 +147,7 @@ void LoadImageCallback(Fl_Widget* w) {
 
     fnfc.title("Pick a file");
     fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-    fnfc.filter("Images\t*.{png,bmp,jpg,jpeg,tga,webp,vtf}\n");
+    fnfc.filter("Images\t*.{png,bmp,jpg,jpeg,tga,webp,vtf,gif,apng}\n");
     
     switch ( fnfc.show() ) {
         case -1:
