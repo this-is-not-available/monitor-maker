@@ -121,9 +121,15 @@ int LoadImageForCurrentFrame(const char* filename) {
         vtf.setSize(currentSkin->width, currentSkin->height, vtfpp::ImageConversion::ResizeFilter::DEFAULT);
     }
     
+    unsigned int addedFrames = 1;
     for (unsigned int i = 0; i < vtf.getFrameCount(); i++) {
         unsigned int f = selectedFrame - 1 + i;
+        if (f >= MAX_FRAMES) {
+            break;
+        }
+
         if (i > 0) {
+            addedFrames += 1;
             AddEmptyFrameToSkin(currentSkin, f);
             currentSkin->imageLoaded[f + vtf.getFrameCount() - 1] = currentSkin->imageLoaded[f];
         }
@@ -131,7 +137,7 @@ int LoadImageForCurrentFrame(const char* filename) {
         currentSkin->imageLoaded[f] = true;
     }
 
-    return vtf.getFrameCount();
+    return addedFrames;
 }
 
 bool LoadPortal2FromPath(fs::path path, fspp::FileSystemOptions options) {
