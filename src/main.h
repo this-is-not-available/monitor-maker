@@ -43,7 +43,7 @@ public:
     std::vector<RGBATexture> frames = {};
     std::string materialName;
 
-    bool imageLoaded[MAX_FRAMES] = {};
+    bool imageLoaded[MAX_FRAMES + 1] = {};
     std::vector<Fl_Image*> previewImages = {};
 };
 

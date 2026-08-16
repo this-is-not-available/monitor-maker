@@ -72,7 +72,9 @@ void AddEmptyFrameToSkin(Skin* skin, unsigned int frame) {
 
 // Remove 0-based frame from provided skin
 void RemoveFrameFromSkin(Skin* skin, unsigned int frame) {
-    skin->imageLoaded[frame] = false;
+    for (unsigned int i = frame; i < skin->frames.size(); i++) {
+        skin->imageLoaded[frame] = skin->imageLoaded[frame + 1];
+    }
     skin->frames.erase(skin->frames.begin() + frame);
 }
 
