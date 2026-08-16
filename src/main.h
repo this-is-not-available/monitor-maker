@@ -60,10 +60,11 @@ extern bool p2Found;
 void AddNewSkin();
 void RemoveSkin(unsigned char skin);
 
-void RemoveFrameFromSkin(Skin* skin, unsigned int frame);
 void AddEmptyFrameToSkin(Skin* skin);
+void AddEmptyFrameToSkin(Skin* skin, unsigned int frame);
+void RemoveFrameFromSkin(Skin* skin, unsigned int frame);
 
-void LoadImageForCurrentFrame(const char* filename);
+int LoadImageForCurrentFrame(const char* filename);
 void ExportModel(std::filesystem::path outputPath);
 
 #endif

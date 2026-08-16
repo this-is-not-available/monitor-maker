@@ -64,6 +64,12 @@ void AddEmptyFrameToSkin(Skin* skin) {
     skin->frames.push_back(newFrame);
 }
 
+// Add empty frame at the specified point to the current skin
+void AddEmptyFrameToSkin(Skin* skin, unsigned int frame) {
+    RGBATexture newFrame;
+    skin->frames.insert(skin->frames.begin() + frame, newFrame);
+}
+
 // Remove 0-based frame from provided skin
 void RemoveFrameFromSkin(Skin* skin, unsigned int frame) {
     skin->imageLoaded[frame] = false;
@@ -73,7 +79,8 @@ void RemoveFrameFromSkin(Skin* skin, unsigned int frame) {
 // Load image from provided filename to the current frame
 // Resizes it to fit previous frames' dimensions 
 // Does not touch preview images
-void LoadImageForCurrentFrame(const char* filename) {
+// Returns amount of added frames
+int LoadImageForCurrentFrame(const char* filename) {
     vtfpp::VTF::CreationOptions options;
     options.outputFormat = vtfpp::ImageFormat::RGBA8888;
     vtfpp::VTF vtf;
@@ -100,7 +107,7 @@ void LoadImageForCurrentFrame(const char* filename) {
 
     if (width == 0 || height == 0) {
         currentSkin->imageLoaded[selectedFrame - 1] = false;
-        return;
+        return 0;
     }
 
     if (currentSkin->width == 0 && currentSkin->height == 0) {
@@ -112,8 +119,17 @@ void LoadImageForCurrentFrame(const char* filename) {
         vtf.setSize(currentSkin->width, currentSkin->height, vtfpp::ImageConversion::ResizeFilter::DEFAULT);
     }
     
-    currentSkin->frames[selectedFrame - 1] = vtf.getImageDataAsRGBA8888(0,0,0,0);
-    currentSkin->imageLoaded[selectedFrame - 1] = true;
+    for (unsigned int i = 0; i < vtf.getFrameCount(); i++) {
+        unsigned int f = selectedFrame - 1 + i;
+        if (i > 0) {
+            AddEmptyFrameToSkin(currentSkin, f);
+            currentSkin->imageLoaded[f + vtf.getFrameCount() - 1] = currentSkin->imageLoaded[f];
+        }
+        currentSkin->frames[f] = vtf.getImageDataAsRGBA8888(0,i,0,0);
+        currentSkin->imageLoaded[f] = true;
+    }
+
+    return vtf.getFrameCount();
 }
 
 bool LoadPortal2FromPath(fs::path path, fspp::FileSystemOptions options) {

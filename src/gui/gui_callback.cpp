@@ -161,33 +161,43 @@ void LoadImageCallback(Fl_Widget* w) {
         }
         default:
         { // FILE CHOSEN
-            LoadImageForCurrentFrame(fnfc.filename());
+            int numAddedFrames = LoadImageForCurrentFrame(fnfc.filename());
             Skin* currentSkin = &skins[selectedSkin];
 
-            if (!currentSkin->imageLoaded[selectedFrame - 1]) {
-                fl_alert("The selected image failed to load!");
-                break;
+            for (int i = 0; i < numAddedFrames; i++) {
+                int targetIndex = i + selectedFrame - 1;
+                if (!currentSkin->imageLoaded[targetIndex]) {
+                    fl_alert("The selected image failed to load!");
+                    break;
+                }
+                
+                // Get image pixels
+                RGBATexture* frame = &currentSkin->frames[targetIndex];
+                const uchar* pixel_data = reinterpret_cast<const uchar*>(frame->data());
+
+                // Resize
+                Fl_RGB_Image* base_img = new Fl_RGB_Image(pixel_data, currentSkin->width, currentSkin->height, 4);
+                int image_size = std::min(PreviewImage->w(), PreviewImage->h());
+                Fl_Image* resized = base_img->copy(image_size, image_size);
+                delete base_img;
+
+                // Grow array to fit frame
+                if (static_cast<size_t>(targetIndex) >= currentSkin->previewImages.size()) {
+                    currentSkin->previewImages.resize(targetIndex + 1);
+                }
+
+                if (i > 0) {
+                    currentSkin->previewImages.insert(currentSkin->previewImages.begin() + targetIndex, resized);
+                } else {
+                    // Store frame
+                    delete currentSkin->previewImages[targetIndex];
+                    currentSkin->previewImages[targetIndex] = resized;
+                }
             }
-            
-            // Get image pixels
-            RGBATexture* frame = &currentSkin->frames[selectedFrame - 1];
-            const uchar* pixel_data = reinterpret_cast<const uchar*>(frame->data());
 
-            // Resize
-            Fl_RGB_Image* base_img = new Fl_RGB_Image(pixel_data, currentSkin->width, currentSkin->height, 4);
-            int image_size = std::min(PreviewImage->w(), PreviewImage->h());
-            Fl_Image* resized = base_img->copy(image_size, image_size);
-            delete base_img;
-
-            // Grow array to fit frame
-            int targetIndex = selectedFrame - 1;
-            if (static_cast<size_t>(targetIndex) >= currentSkin->previewImages.size()) {
-                currentSkin->previewImages.resize(targetIndex + 1);
+            if (numAddedFrames > 1) {
+                currentSkin->animated = true;
             }
-
-            // Store frame
-            delete currentSkin->previewImages[targetIndex];
-            currentSkin->previewImages[targetIndex] = resized;
 
             // Display
             UpdateInterface();
