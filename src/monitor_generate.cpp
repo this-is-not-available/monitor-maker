@@ -36,7 +36,8 @@ void WriteSkin(Skin skin, fs::path path) {
     vtfpp::VTF::CreationOptions options;
     options.outputFormat = vtfpp::ImageFormat::DXT5;
     vtfpp::VTF vtf = vtfpp::VTF::create(skin.frames[0], vtfpp::ImageFormat::RGBA8888, skin.width, skin.height, options);
-    if (skin.frames.size() == 1) {
+    if (skin.frames.size() == 1 || !skin.animated) {
+        // if not animated or no more frames, dont export more frames
     }
     else {
         vtf.setMipCount(1);
