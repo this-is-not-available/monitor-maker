@@ -31,6 +31,7 @@ void FrameSelectorCallback(Fl_Widget* w) {
 void AnimatedCheckboxCallback(Fl_Widget* w) {
     skins[selectedSkin].animated = AnimatedCheckbox->value();
     isAnimating = false;
+    selectedFrame = 0;
     UpdateInterface(); // update frame controls visibility
 }
 
