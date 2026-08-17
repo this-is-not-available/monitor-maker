@@ -147,7 +147,9 @@ void LoadImageCallback(Fl_Widget* w) {
 
     fnfc.title("Pick a file");
     fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-    fnfc.filter("Images\t*.{png,bmp,jpg,jpeg,tga,webp,vtf,gif,apng}\n");
+    fnfc.filter("All\t*.{png,bmp,jpg,jpeg,tga,webp,vtf,gif,apng}\n"
+                "Images\t*.{png,bmp,jpg,jpeg,tga,webp,vtf}\n"
+                "Animated Images\t*.{gif,apng,vtf}");
     
     switch ( fnfc.show() ) {
         case -1:
