@@ -12,6 +12,12 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "" FORCE)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 if(WIN32)
+  # probably not best practice to put in source dir but avoids having to fix the icon path and I am lazy
+  configure_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/assets/resources.rc.in"
+      "${CMAKE_CURRENT_SOURCE_DIR}/assets/resources.rc"
+      @ONLY
+  )
     set(WIN_RESOURCE_FILES assets/resources.rc)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
